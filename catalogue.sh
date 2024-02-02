@@ -10,10 +10,10 @@ MONGDB_HOST=mongodb.chandulearn.online
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "script stareted executing at $TIMESTAMP" &>> $LOGFILE
+echo "script stareted executing at $TIMESTAMP" &>> "$LOGFILE"
 
 VALIDATE(){
-    if [ $1 -ne 0 ]
+    if [ "$1" -ne 0 ]
     then
         echo -e "$2 ... $R FAILED $N"
         exit 1
@@ -22,7 +22,7 @@ VALIDATE(){
     fi
 }
 
-if [ $ID -ne 0 ]
+if [ "$ID" -ne 0 ]
 then
     echo -e "$R ERROR:: Please run this script with root access $N"
     exit 1 # you can give other than 0
@@ -30,15 +30,15 @@ else
     echo "You are root user"
 fi # fi means reverse of if, indicating condition end
 
-dnf module disable nodejs -y &>> $LOGFILE
+dnf module disable nodejs -y &>> "$LOGFILE"
 
 VALIDATE $? "Disabling current NodeJS"
 
-dnf module enable nodejs:18 -y  &>> $LOGFILE
+dnf module enable nodejs:18 -y  &>> "$LOGFILE"
 
 VALIDATE $? "Enabling NodeJS:18"
 
-dnf install nodejs -y  &>> $LOGFILE
+dnf install nodejs -y  &>> "$LOGFILE"
 
 VALIDATE $? "Installing NodeJS:18"
 
@@ -55,34 +55,34 @@ mkdir -p /app
 
 VALIDATE $? "creating app directory"
 
-curl -o /mp/catalogtue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip  &>> $LOGFILE
+curl -o /mp/catalogtue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip  &>> "$LOGFILE"
 
 VALIDATE $? "Downloading catalogue application"
 
-cd /app 
+cd /app || exit 
 
-unzip -o /tmp/catalogue.zip  &>> $LOGFILE
+unzip -o /tmp/catalogue.zip  &>> "$LOGFILE"
 
 VALIDATE $? "unzipping catalogue"
 
-npm install  &>> $LOGFILE
+npm install  &>> "$LOGFILE"
 
 VALIDATE $? "Installing dependencies"
 
 # use absolute, because catalogue.service exists there
-cp /home/centos/roboshop-shell/catalogue.service /etc/systemd/system/catalogue.service &>> $LOGFILE
+cp /home/centos/roboshop-shell/catalogue.service /etc/systemd/system/catalogue.service &>> "$LOGFILE"
 
 VALIDATE $? "Copying catalogue service file"
 
-systemctl daemon-reload &>> $LOGFILE
+systemctl daemon-reload &>> "$LOGFILE"
 
 VALIDATE $? "catalogue daemon reload"
 
-systemctl enable catalogue &>> $LOGFILE
+systemctl enable catalogue &>> "$LOGFILE"
 
 VALIDATE $? "Enable catalogue"
 
-systemctl start catalogue &>> $LOGFILE
+systemctl start catalogue &>> "$LOGFILE"
 
 VALIDATE $? "Starting catalogue"
 
@@ -90,10 +90,10 @@ cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
 
 VALIDATE $? "copying mongodb repo"
 
-dnf install mongodb-org-shell -y &>> $LOGFILE
+dnf install mongodb-org-shell -y &>> "$LOGFILE"
 
 VALIDATE $? "Installing MongoDB client"
 
-mongo --host $MONGDB_HOST </app/schema/catalogue.js &>> $LOGFILE
+mongo --host $MONGDB_HOST </app/schema/catalogue.js &>> "$LOGFILE"
 
 VALIDATE $? "Loading catalouge data into MongoDB"
