@@ -61,11 +61,11 @@ VALIDATE $? "Downloading catalogue application"
 
 cd /app || exit 
 
-unzip -o /tmp/catalogue.zip  &>> "$LOGFILE"
+unzip -o /tmp/catalogue.zip  &>> $LOGFILE
 
 VALIDATE $? "unzipping catalogue"
 
-npm install  &>> "$LOGFILE"
+npm install  &>> $LOGFILE
 
 VALIDATE $? "Installing dependencies"
 
@@ -74,15 +74,15 @@ cp /home/centos/devopslearning/roboshop-shell/catalogue.service /etc/systemd/sys
 
 VALIDATE $? "Copying catalogue service file"
 
-systemctl daemon-reload &>> "$LOGFILE"
+systemctl daemon-reload &>> $LOGFILE
 
 VALIDATE $? "catalogue daemon reload"
 
-systemctl enable catalogue &>> "$LOGFILE"
+systemctl enable catalogue &>> $LOGFILE
 
 VALIDATE $? "Enable catalogue"
 
-systemctl start catalogue &>> "$LOGFILE"
+systemctl start catalogue &>> $LOGFILE
 
 VALIDATE $? "Starting catalogue"
 
@@ -90,10 +90,10 @@ cp /home/centos/devopslearning/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.
 
 VALIDATE $? "copying mongodb repo"
 
-dnf install mongodb-org-shell -y &>> "$LOGFILE"
+dnf install mongodb-org-shell -y &>> $LOGFILE
 
 VALIDATE $? "Installing MongoDB client"
 
-mongo --host $MONGDB_HOST </app/schema/catalogue.js &>> "$LOGFILE"
+mongo --host $MONGDB_HOST </app/schema/catalogue.js &>> $LOGFILE
 
 VALIDATE $? "Loading catalouge data into MongoDB"
