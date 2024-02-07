@@ -55,13 +55,13 @@ mkdir -p /app
 
 VALIDATE $? "creating app directory"
 
-curl -o /tmp/catalogtue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip  &>> "$LOGFILE"
+curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip  &>> "$LOGFILE"
 
 VALIDATE $? "Downloading catalogue application"
 
 cd /app || exit 
 
-unzip -o /tmp/ catalogue.zip  &>> $LOGFILE
+unzip -o /tmp/catalogue.zip  &>> $LOGFILE
 
 VALIDATE $? "unzipping catalogue"
 
